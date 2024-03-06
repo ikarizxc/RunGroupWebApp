@@ -13,13 +13,13 @@
             {
 				<div class="col">
 					<div class="card shadow-sm">
-						<img class="card-img-top" src="@race.Image" alt="Club image" />
+						<img class="card-img-top" src="@race.Image" alt="Race image" />
 						<div class="card-body">
 							<h3 class="card-text">@race.Title</h3>
 							<p class="card-text">@race.Description</p>
 							<div class="d-flex justify-content-between align-items-center">
 								<div class="btn-group">
-									<button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+									<a type="btn btn-success" asp-controller="Race" asp-action="Detail" asp-route-id="@race.Id" class="btn btn-sm btn-outline-secondary">View</a>
 									<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
 								</div>
 								<small class="text-body-secondary">Category: @race.RaceCategory</small>
