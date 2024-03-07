@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
+using RunGroupWebApp.Helpers;
 using RunGroupWebApp.Interfaces;
 using RunGroupWebApp.Repository;
+using RunGroupWebApp.Services;
 
 internal class Program
 {
@@ -15,6 +17,11 @@ internal class Program
         // Add club and race repos
         builder.Services.AddScoped<IClubRepository, ClubRepository>();
         builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+
+        // Add Cloudinary
+        builder.Services.AddScoped<IPhotoService, PhotoService>();
+        builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
 
         // Add Database context
         builder.Services.AddDbContext<ApplicationDbContext>(
