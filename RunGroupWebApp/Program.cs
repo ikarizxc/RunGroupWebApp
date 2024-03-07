@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
+using RunGroupWebApp.Interfaces;
+using RunGroupWebApp.Repository;
 
 internal class Program
 {
@@ -10,6 +12,11 @@ internal class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
+        // Add club and race repos
+        builder.Services.AddScoped<IClubRepository, ClubRepository>();
+        builder.Services.AddScoped<IRaceRepository, RaceRepository>();
+
+        // Add Database context
         builder.Services.AddDbContext<ApplicationDbContext>(
             options =>
             {
