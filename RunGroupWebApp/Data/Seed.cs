@@ -67,7 +67,7 @@ namespace RunGroupWebApp.Data
                             {
                                 Street = "123 Main St",
                                 City = "Michigan",
-                                State = "NC"
+								State = "NC"
                             }
                         }
                     });

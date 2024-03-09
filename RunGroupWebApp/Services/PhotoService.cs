@@ -29,7 +29,7 @@ namespace RunGroupWebApp.Services
 				var uploadParams = new ImageUploadParams
 				{
 					File = new FileDescription(file.FileName, stream),
-					Transformation = new Transformation().Height(300).Width(500).Crop("fill").Gravity("face")
+					Transformation = new Transformation().Height(300).Width(500).Crop("scale")
 				};
 				uploadResult = await cloudinary.UploadAsync(uploadParams);
 			}
