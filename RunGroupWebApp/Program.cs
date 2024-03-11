@@ -21,6 +21,9 @@ builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 // Add dashboard
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 
+// Add users
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 // Add Cloudinary
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));

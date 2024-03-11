@@ -1,0 +1,43 @@
+﻿﻿@using RunGroupWebApp.ViewModels
+@model List<IndexUserViewModel>
+
+<section class="flush-with-above">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover align-items-center table-borderless">
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr class="bg-white" style="margin-bottom: 1rem">
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <div class="media-body">
+                                            <span class="h6 mb-0">@user.UserName</span>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                @{
+                                    var mileage = user.Kilometers == null ? "?" : user.Kilometers.ToString();
+                                    var pace = user.Pace == null ? "?" : user.Pace.ToString();
+                                }
+                                <td>Kilometers: @mileage km</td>
+                                <td>Pace: @pace kmph</td>
+
+                                <td>
+                                    <a class="btn btn-outline-primary" asp-controller="User" asp-action="Detail" asp-route-id="@user.Id">
+                                        View Profile
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!--end of col-->
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>
