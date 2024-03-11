@@ -2,6 +2,7 @@
 @model RunGroupWebApp.ViewModels.EditRaceViewModel
 
 <form method="post" asp-action="Edit" enctype="multipart/form-data">
+    <input type="hidden" id="AppUserId" name="AppUserId" asp-for="AppUserId" />
     <input type="hidden" value="AddressId" id="AddressId" />
     <div class="form-group" style="margin-bottom: 1rem">
         <label asp-for="Title">Title</label>

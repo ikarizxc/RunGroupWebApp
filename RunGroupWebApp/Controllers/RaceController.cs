@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RunGroupWebApp.Data;
 using RunGroupWebApp.Interfaces;
@@ -13,10 +14,12 @@ namespace RunGroupWebApp.Controllers
     {
         private readonly IRaceRepository raceRepository;
         private readonly IPhotoService photoService;
-        public RaceController(IRaceRepository raceRepository, IPhotoService photoService)
+        private readonly IHttpContextAccessor httpContextAccessor;
+		public RaceController(IRaceRepository raceRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             this.raceRepository = raceRepository;
             this.photoService = photoService;
+            this.httpContextAccessor = httpContextAccessor;
         }
         public async Task<IActionResult> Index()
         {
@@ -34,7 +37,13 @@ namespace RunGroupWebApp.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var curUserId = httpContextAccessor.HttpContext.User.GetUserId();
+            var raceVM = new CreateRaceViewModel
+            {
+                AppUserId = curUserId,
+            };
+
+            return View(raceVM);
         }
 
         [HttpPost]
@@ -53,7 +62,8 @@ namespace RunGroupWebApp.Controllers
 				Title = raceVM.Title,
 				Description = raceVM.Description,
 				Image = result.Url.ToString(),
-				Address = new Address
+                AppUserId = raceVM.AppUserId,
+                Address = new Address
 				{
 					Street = raceVM.Address.Street,
 					City = raceVM.Address.City,
@@ -62,8 +72,8 @@ namespace RunGroupWebApp.Controllers
 			};
 			raceRepository.Add(race);
 
-			return RedirectToAction("Index");
-		}
+            return RedirectToAction("Index", "Dashboard");
+        }
 
 		public async Task<IActionResult> Edit(int id)
 		{
@@ -81,6 +91,7 @@ namespace RunGroupWebApp.Controllers
 				Address = race.Address,
 				URL = race.Image,
 				RaceCategory = race.RaceCategory,
+				AppUserId = race.AppUserId,
 			};
 
 			return View(raceVM);
@@ -122,6 +133,7 @@ namespace RunGroupWebApp.Controllers
 				Address = raceVM.Address,
 				RaceCategory = raceVM.RaceCategory,
 				Image = photoResult.Url.ToString(),
+				AppUserId = raceVM.AppUserId,
 			};
 
 			raceRepository.Update(race);

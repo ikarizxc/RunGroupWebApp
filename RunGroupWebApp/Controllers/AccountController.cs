@@ -46,7 +46,7 @@ namespace RunGroupWebApp.Controllers
                     var result = await signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Race");
+                        return RedirectToAction("Index", "Dashboard");
                     }
                 }
                 //password is incorrect
@@ -93,8 +93,8 @@ namespace RunGroupWebApp.Controllers
             var newUserResponce = await userManager.CreateAsync(newUser, registerVM.Password);
             if (newUserResponce.Succeeded)
             {
-                await userManager.AddToRoleAsync(newUser, UserRoles.User); 
-                return RedirectToAction("Index", "Race");
+                await userManager.AddToRoleAsync(newUser, UserRoles.User);
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in newUserResponce.Errors)
@@ -108,7 +108,7 @@ namespace RunGroupWebApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Race");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<AppUser> SignInManager
+
+@model RunGroupWebApp.ViewModels.DashboardViewModel
+
+<div style="display:flex; flex-direction:column; justify-content:center; text-align:center">
+	<h2 class="display-4 fw-normal" style="margin-bottom:1rem">User Dashboard</h2>
+	<div style="display:flex; flex-direction:row; justify-content:center">
+		<a type="button" class="btn btn-primary" style="margin:0rem 2rem" asp-area="" asp-controller="Club" asp-action="Create">Create Club</a>
+		<a type="button" class="btn btn-primary" style="margin:0rem 2rem" asp-area="" asp-controller="Race" asp-action="Create">Create Race</a>
+		<a type="button" class="btn btn-primary" style="margin:0rem 2rem" asp-area="" asp-controller="Dashboard" asp-action="EditUserProfile">Edit User Profile</a>
+	</div>
+</div>
+<div class="album py-5">
+	<div class="container" style="text-align:center">
+
+		<div style="margin-bottom:3rem">
+			<h4 class="display-6 fw-normal" style="margin-bottom:1.5rem">Your clubs</h4>
+			@if (Model.Clubs.Count > 0)
+			{
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="text-align:left">
+					@foreach (var item in Model.Clubs)
+					{
+						<div class="col">
+							<div class="ccard shadow-sm">
+								<img class="card-img-top" src="@item.Image" alt="Club image" />
+								<div class="card-body">
+									<h3 class="card-text">@item.Title</h3>
+									<p class="card-text">@item.Description</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<a type="btn btn-success" asp-controller="Club" asp-action="Detail" asp-route-id="@item.Id"
+											   class="btn btn-sm btn-outline-secondary">View</a>
+											@if (SignInManager.IsSignedIn(User))
+											{
+												<a type="btn btn-success" asp-controller="Club" asp-action="Edit" asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-secondary">Edit</a>
+												<a type="btn btn-success" asp-controller="Club" asp-action="Delete" asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-secondary">Delete</a>
+											}
+										</div>
+										<small class="text-body-secondary">Category: @item.ClubCategory</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			}
+			else
+			{
+				<p class="display-8 fw-normal">Clubs is empty :(</p>
+			}
+		</div>
+
+		<div style="margin-bottom:3rem">
+			<h4 class="display-6 fw-normal" style="margin-bottom:1.5rem">Your races</h4>
+			@if (Model.Races.Count > 0)
+			{
+				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" style="text-align:center">
+					@foreach (var item in Model.Races)
+					{
+						<div class="col">
+							<div class="card shadow-sm">
+								<img class="card-img-top" src="@item.Image" alt="Race image" />
+								<div class="card-body">
+									<h3 class="card-text">@item.Title</h3>
+									<p class="card-text">@item.Description</p>
+									<div class="d-flex justify-content-between align-items-center">
+										<div class="btn-group">
+											<a type="btn btn-success" asp-controller="Club" asp-action="Detail" asp-route-id="@item.Id"
+											   class="btn btn-sm btn-outline-secondary">View</a>
+											@if (SignInManager.IsSignedIn(User))
+											{
+												<a type="btn btn-success" asp-controller="Race" asp-action="Edit" asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-secondary">Edit</a>
+												<a type="btn btn-success" asp-controller="Race" asp-action="Delete" asp-route-id="@item.Id"
+												   class="btn btn-sm btn-outline-secondary">Delete</a>
+											}
+										</div>
+										<small class="text-body-secondary">Category: @item.RaceCategory</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			}
+			else
+			{
+				<p class="display-8 fw-normal">Races is empty :(</p>
+			}
+		</div>
+
+	</div>
+</div>

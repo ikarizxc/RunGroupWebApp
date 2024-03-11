@@ -18,22 +18,25 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IClubRepository, ClubRepository>();
 builder.Services.AddScoped<IRaceRepository, RaceRepository>();
 
+// Add dashboard
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+
 // Add Cloudinary
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+
+// Add Database context
+builder.Services.AddDbContext<ApplicationDbContext>(
+    options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
 
 // Add IdentityFramework
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-
-// Add Database context
-builder.Services.AddDbContext<ApplicationDbContext>(
-	options =>
-	{
-		options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-	});
 
 var app = builder.Build();
 
@@ -55,7 +58,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

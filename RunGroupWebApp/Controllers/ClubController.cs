@@ -13,10 +13,12 @@ namespace RunGroupWebApp.Controllers
     {
         private readonly IClubRepository clubRepository;
         private readonly IPhotoService photoService;
-        public ClubController(IClubRepository clubRepository, IPhotoService photoService)
+        private readonly IHttpContextAccessor httpContextAccessor;
+        public ClubController(IClubRepository clubRepository, IPhotoService photoService, IHttpContextAccessor httpContextAccessor)
         {
             this.clubRepository = clubRepository;
             this.photoService = photoService;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
@@ -35,7 +37,13 @@ namespace RunGroupWebApp.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var curUserId = httpContextAccessor.HttpContext.User.GetUserId();
+            var clubVM = new CreateClubViewModel
+            {
+                AppUserId = curUserId,
+            };
+
+            return View(clubVM);
         }
 
         [HttpPost]
@@ -54,6 +62,7 @@ namespace RunGroupWebApp.Controllers
 				Title = clubVM.Title,
 				Description = clubVM.Description,
 				Image = result.Url.ToString(),
+                AppUserId = clubVM.AppUserId,
 				Address = new Address
 				{
 					Street = clubVM.Address.Street,
@@ -63,7 +72,7 @@ namespace RunGroupWebApp.Controllers
 			};
 			clubRepository.Add(club);
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Index", "Dashboard");
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -82,6 +91,7 @@ namespace RunGroupWebApp.Controllers
                 Address = club.Address,
                 URL = club.Image,
                 ClubCategory = club.ClubCategory,
+                AppUserId = club.AppUserId
             };
 
             return View(clubVM);
@@ -123,6 +133,7 @@ namespace RunGroupWebApp.Controllers
                 Address = clubVM.Address,
                 ClubCategory = clubVM.ClubCategory,
                 Image = photoResult.Url.ToString(),
+                AppUserId = clubVM.AppUserId,
             };
 
             clubRepository.Update(club);
